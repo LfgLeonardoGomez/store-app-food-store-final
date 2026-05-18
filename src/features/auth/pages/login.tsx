@@ -1,11 +1,12 @@
 import { useState } from "react"
 
+// dejo este tsx de prueba para linkear la ruta
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault()
         // Handle login logic here
     }
