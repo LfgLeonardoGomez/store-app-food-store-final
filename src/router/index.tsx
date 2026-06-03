@@ -7,6 +7,7 @@ import Login from '../features/auth/pages/login'
 import MainLayout from '../shared/components/layout/MainLayout'
 import ProductDetailPage from '../features/productos/pages/ProductDetailPage'
 import CheckoutPage from '../features/pedidos/pages/CheckoutPage'
+import RegisterPage from '../features/auth/pages/register'
 
 export default function AppRouter() {
     return (
@@ -22,6 +23,7 @@ export default function AppRouter() {
 
             {/* Rutas sin navbar */}
             <Route path={ROUTES.LOGIN} element={<Login />} />
+            <Route path={ROUTES.REGISTER} element={<RegisterPage/>}/>
         </Routes>
     )
 }

@@ -8,7 +8,7 @@ export const pedidoService = {
     return data;
     },
     listarDirecciones: async (): Promise<DireccionEntregaList> => {
-    const { data } = await api.get('/direcciones');
+    const { data } = await api.get('/direcciones/');
     return data;
     },
 };

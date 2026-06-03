@@ -173,6 +173,7 @@ export default function CheckoutPage() {
               className="w-full"
               disabled={!direccionId || crearPedido.isPending}
               onClick={handleConfirmar}
+            
             >
               {crearPedido.isPending ? 'Procesando...' : 'Confirmar pedido'}
             </Button>

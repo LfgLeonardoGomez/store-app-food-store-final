@@ -1,4 +1,4 @@
-import { ShoppingCart, LogOut } from 'lucide-react'
+import { User,ShoppingCart, LogOut, LogIn } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
@@ -6,6 +6,8 @@ import { useCartStore } from '../../../store/useCartStore'
 import { useAuthStore } from '../../../store/useAuthStore'
 import { authService } from '../../../features/auth/services/authService'
 import { toast } from 'sonner'
+import { UserSidebar } from '../molecular/UserSidebar'
+import { useState } from 'react'
 
 const navClasses = 'sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border px-4 py-3'
 const divInterno = 'max-w-7xl mx-auto flex items-center justify-between'
@@ -17,6 +19,8 @@ export const NavBar = () => {
     const count = useCartStore((state) => state.items.reduce((acc, item) => acc + item.cantidad, 0))
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
     const logout = useAuthStore((state) => state.logout)
+    const user = useAuthStore((state)=> state.user)
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     const handleLogout = async () => {
         try {
@@ -32,6 +36,7 @@ export const NavBar = () => {
     }
 
     return (
+        <>
         <nav className={navClasses}>
             <div className={divInterno}>
                 <Link to="/">
@@ -39,16 +44,26 @@ export const NavBar = () => {
                 </Link>
 
                 <div className="flex items-center gap-2">
-                    {isAuthenticated && (
+                    {isAuthenticated ? (
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={handleLogout}
-                            className="text-text-secondary hover:text-danger"
-                            title="Cerrar sesión"
+                            onClick={()=>setIsSidebarOpen(true)}
+                            className="text-text-secondary hover:text-primary"
                         >
-                            <LogOut size={20} />
+                            <User size={20} />
+                        
                         </Button>
+                    ) : (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-text-secondary hover:text-primary hover:bg-green-50"
+                                onClick={()=> navigate('/login')}
+                            >
+                                <LogIn size={20} />
+                                Iniciar sesión
+                            </Button>
                     )}
 
                     <Link to="/cart" className={carritoClasses}>
@@ -62,5 +77,12 @@ export const NavBar = () => {
                 </div>
             </div>
         </nav>
+        <UserSidebar
+                    isOpen={isSidebarOpen}
+                    onClose={() => setIsSidebarOpen(false)}
+                    onLogout={handleLogout}
+                    userName={user?.name}
+                />
+                </>
     )
 }

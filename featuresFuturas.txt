@@ -1,0 +1,28 @@
+
+
+UI mas bonita para el store: no hace falta tanto, 
+el profe dice de agregar un banner tipo carrousel entre el titulo y "nuestros prductos"
+
+
+acomodar el stock, que no permita pedir mas que el stock, 
+y que al comprar se descuente del stock
+
+revisar la proteccion de rutas
+
+vistas:
+
+perfil del usuario ✅
+
+sidebar user ✅
+
+ver mis pedidos
+
+ver-crear direcciones
+
+registro  ✅
+
+agregar boton iniciar/cerrar sesion en navbar ✅
+
+pagos
+
+modificar en el schema de pedido, envia id usuario y seria mejor ver el nombre

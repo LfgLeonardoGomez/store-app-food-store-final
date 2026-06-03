@@ -13,9 +13,18 @@ export interface PedidoCreate {
     notas?: string;
     detalles: DetallePedidoCreate[];
 }
+
 export interface DireccionEntrega {
     id: number;
+    alias: string;
+    linea_1: string;
+    linea_2?: string;
+    ciudad: string;
+    provincia: string;
+    codigo_postal: string;
+    es_principal: boolean;
 }
+
 export interface DireccionEntregaList {
     data: DireccionEntrega[];
     count: number;

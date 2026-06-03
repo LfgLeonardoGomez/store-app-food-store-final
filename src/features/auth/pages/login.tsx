@@ -13,7 +13,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
 
@@ -107,7 +107,22 @@ export default function Login() {
               'Iniciar sesión'
             )}
           </Button>
+
         </form>
+        {/* Registrarse */}
+
+        <div className="mt-2 border-border text-center">
+          <span
+          className="inline-flex items-center gap-2 text-sm text-text-secondary">
+            Todavia no tenes un cuenta?...
+          </span>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-primary transition-colors"
+          >
+                Registrate!
+          </Link>
+        </div>
 
         {/* Footer */}
         <div className="mt-6 pt-6 border-t border-border text-center">
