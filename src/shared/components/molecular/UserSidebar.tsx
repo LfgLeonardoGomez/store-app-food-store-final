@@ -1,16 +1,18 @@
 import { X, User, Package, MapPin, LogOut } from 'lucide-react'
 import { Button } from '../ui/Button'
+
 interface UserSidebarProps {
     isOpen: boolean
     onClose: () => void
     onLogout: () => void
     userName?:string
+    onMisPedidos: ()=> void
 }  
-export const UserSidebar = ({ isOpen, onClose, onLogout, userName }: UserSidebarProps) => {
+export const UserSidebar = ({ isOpen, onClose, onLogout, userName, onMisPedidos}: UserSidebarProps) => {
     if (!isOpen) return null
     const menuItems = [
         { icon: User, label: 'Mi perfil', action: () => alert('Próximamente: Perfil') },
-        { icon: Package, label: 'Mis pedidos', action: () => alert('Próximamente: Pedidos') },
+        { icon: Package, label: 'Mis pedidos', action: onMisPedidos },
         { icon: MapPin, label: 'Mis direcciones', action: () => alert('Próximamente: Direcciones') },
     ]
     return (

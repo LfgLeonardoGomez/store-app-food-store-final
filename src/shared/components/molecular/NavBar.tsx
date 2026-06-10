@@ -82,6 +82,9 @@ export const NavBar = () => {
                     onClose={() => setIsSidebarOpen(false)}
                     onLogout={handleLogout}
                     userName={user?.name}
+                    onMisPedidos= { ()=> { navigate('/mis-pedidos');
+                        setIsSidebarOpen(false)
+                    }}
                 />
                 </>
     )
