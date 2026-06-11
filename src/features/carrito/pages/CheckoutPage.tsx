@@ -92,7 +92,7 @@ export default function CheckoutPage() {
                   className="border border-border rounded-lg px-4 py-2.5 bg-background text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                 >
                   <option value="">Seleccioná una dirección</option>
-                  {direccionesData?.data.map((dir) => (
+                  {direccionesData?.data.map((dir:any) => (
                     <option key={dir.id} value={dir.id}>
                       {dir.alias} — {dir.linea_1}, {dir.ciudad}
                     </option>

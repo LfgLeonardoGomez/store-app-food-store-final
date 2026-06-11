@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { pedidoService } from '../service/pedidoService';
-import type { PedidoCreate } from '../types/types';
+import { pedidoService } from '../../pedidos/service/pedidoService';
+import type { PedidoCreate } from '../../pedidos/types/types';
 
 export const useDirecciones = () => {
     return useQuery({

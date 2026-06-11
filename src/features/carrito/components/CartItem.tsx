@@ -9,12 +9,13 @@ interface CartItemProps {
     precio: number
     imagen?: string
     cantidad: number
+    stock_cantidad: number
 }
 
-export const CartItem = ({ id, nombre, descripcion, precio, imagen, cantidad }: CartItemProps) => {
+export const CartItem = ({ id, nombre, descripcion, precio, imagen, cantidad, stock_cantidad}: CartItemProps) => {
     const updateQuantity = useCartStore((state) => state.updateQuantity)
     const removeItem = useCartStore((state) => state.removeItem)
-
+    const puedeIncrementar = cantidad < stock_cantidad
     return (
         <div className="flex gap-4 bg-background rounded-card p-4 shadow-card">
             {/* Imagen */}
@@ -50,8 +51,12 @@ export const CartItem = ({ id, nombre, descripcion, precio, imagen, cantidad }: 
                         <Button
                             variant="ghost"
                             size="sm"
+                            disabled={!puedeIncrementar}
                             className="w-8 h-8 p-0"
-                            onClick={() => updateQuantity(id, cantidad + 1)}
+                            onClick={() => {
+                                if(puedeIncrementar){
+                                    updateQuantity(id, cantidad + 1)}
+                                }}
                         >
                             <Plus size={16} />
                         </Button>

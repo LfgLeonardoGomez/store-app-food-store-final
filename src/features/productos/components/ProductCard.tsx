@@ -13,6 +13,7 @@ interface ProductCardProps {
     imagen?: string
     categoria?: string
     badge?: string
+    stock_cantidad: number
     className?: string
 }
 
@@ -20,14 +21,26 @@ const cardClasses = 'bg-background rounded-card shadow-card hover:shadow-card-ho
 const divImageClasses = 'relative aspect-[4/3] overflow-hidden bg-surface'
 const imageClasses = 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
 
+
+
 export const ProductCard = ({ id, nombre, descripcion, precio, imagen,
-    categoria, badge, className = ""
+    categoria, badge,stock_cantidad, className = ""
 }: ProductCardProps) => {
+    // consulta los items del carrito
+const items = useCartStore((state) => state.items)
+    const itemEnCarrito = items.find(item => item.id === id)
+    const cantidadEnCarrito = itemEnCarrito?.cantidad ?? 0
+    const puedeAgregar = cantidadEnCarrito < stock_cantidad
+
     const addItem = useCartStore((state) => state.addItem)
     const badgeText = badge || categoria
 
     const handleAddToCart = () => {
-        addItem({ id, nombre, descripcion, precio, imagen })
+        if(!puedeAgregar){
+            toast.error('No hay stock disponible')
+            return
+        }
+        addItem({ id, nombre, descripcion, precio, imagen },stock_cantidad)
         toast.success('Producto agregado al carrito')
     }
 
@@ -58,12 +71,14 @@ export const ProductCard = ({ id, nombre, descripcion, precio, imagen,
                     <Button 
                     variant="primary" 
                     size="sm" 
+                    disabled={!puedeAgregar || stock_cantidad === 0}
+                    className={!puedeAgregar ? 'opacity-50 cursor-not-allowed' : ''}
                     onClick={(e)=>{
                         e.preventDefault()
                         e.stopPropagation()
                         handleAddToCart()
                     }}>
-                        Agregar
+                        {stock_cantidad === 0 ? 'Sin stock' : 'Agregar'}
                     </Button>
                 </div>
             </div>

@@ -50,6 +50,7 @@ export default function CartPage() {
                             precio={item.precio}
                             imagen={item.imagen}
                             cantidad={item.cantidad}
+                            stock_cantidad={item.stock_cantidad}
                         />
                     ))}
                 </div>

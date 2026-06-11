@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { useMisPedidos } from '../hooks/useCheckout'
+import { useMisPedidos } from '../../carrito/hooks/useCheckout'
 import { useOrderStatusWS, type IWsEvent } from '../hooks/useOrderStatusWS'
 import { Button } from '../../../shared/components/ui/Button'
 import { ESTADO_LABELS, ESTADO_COLORS, type EstadoPedido, type PedidoPublic } from '../types/types'
@@ -48,8 +48,8 @@ function PedidoActivoCard({ pedido, estadoActual }: { pedido: PedidoPublic; esta
                                 <div className="flex flex-col items-center flex-shrink-0">
                                     <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors
                                         ${completado ? 'bg-primary border-primary text-white' :
-                                          actual     ? 'bg-primary/20 border-primary text-primary' :
-                                                       'bg-surface border-border text-text-muted'}`}>
+                                        actual     ? 'bg-primary/20 border-primary text-primary' :
+                                                        'bg-surface border-border text-text-muted'}`}>
                                         {completado ? '✓' : i + 1}
                                     </div>
                                     <span className={`text-[10px] mt-1 text-center leading-tight

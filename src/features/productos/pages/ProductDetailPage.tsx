@@ -11,10 +11,15 @@ import { toast } from 'sonner'
 
 
 export default function ProductDetailPage() {
-    const {id} = useParams()
+const {id} = useParams()
 const {producto, isLoadingDetalle, isErrorDetalle} = useProductos({id:Number(id)})
+const items = useCartStore((state) => state.items)
+const itemEnCarrito = items.find(item => item.id === producto?.id)
+const cantidadEnCarrito = itemEnCarrito?.cantidad ?? 0
+const maxCantidad = producto?.stock_cantidad ?? 0
 const [cantidad, setCantidad] = useState(1)
 const addItem = useCartStore((state)=>state.addItem)
+const puedeAgregar = (cantidadEnCarrito + cantidad)<= (producto?.stock_cantidad ?? 0)
 
     if (isLoadingDetalle) return <div>Cargando...</div>
     if (isErrorDetalle) return <div>Error</div>
@@ -49,21 +54,34 @@ const addItem = useCartStore((state)=>state.addItem)
                         <div className="flex items-center gap-4">
                         <span className="text-text-secondary">Cantidad:</span>
                         <div className="flex items-center border border-border rounded-lg">
-                            <button onClick={() => setCantidad(Math.max(1, cantidad - 1))} className="px-3 py-2 hover:bg-surface">
+                            <button onClick={() => setCantidad(Math.max(1, cantidad - 1))}
+                                disabled = {cantidad <= 1}
+                                className="px-3 py-2 hover:bg-surface">
                             <Minus size={18} />
                             </button>
                             <span className="w-12 text-center font-medium">{cantidad}</span>
-                            <button onClick={() => setCantidad(cantidad + 1)} className="px-3 py-2 hover:bg-surface">
+                            <button onClick={() => setCantidad(Math.max(1,cantidad + 1))}
+                                    disabled ={cantidad >= maxCantidad}
+                                    className="px-3 py-2 hover:bg-surface">
                             <Plus size={18} />
                             </button>
                         </div>
                         </div>
+                        
+                        {cantidad >= maxCantidad && maxCantidad > 0 && (
+                        <p className="text-sm text-danger">Límite de stock alcanzado</p>
+                        )}
 
                         <Button 
                             variant="primary" 
                             size="lg" 
                             className="w-full py-4 text-lg"
+                            disabled={producto.stock_cantidad===0 || cantidadEnCarrito >= producto.stock_cantidad}
                             onClick={() => {
+                                if (!puedeAgregar) {
+                                    toast.error('No hay stock suficiente. Solo quedan ' + producto.stock_cantidad + ' unidades.')
+                                    return
+                                }
                                 // Agregar al carrito 'cantidad' veces
                                 for (let i = 0; i < cantidad; i++) {
                                 addItem({
@@ -72,12 +90,13 @@ const addItem = useCartStore((state)=>state.addItem)
                                     descripcion: producto.descripcion || '',
                                     precio: parseFloat(producto.precio_base),
                                     imagen: producto.imagen_url || undefined,
-                                })
+                                }, producto.stock_cantidad)
                                 }
                                 toast.success(`${cantidad}x ${producto.nombre} agregado al carrito`)
                             }}
-                            >
-                            Agregar al carrito — ${parseFloat(producto.precio_base) * cantidad}
+                            >   {producto.stock_cantidad===0
+                                ? 'Sin stock'
+                                : `Agregar al carrito — $${parseFloat(producto.precio_base) * cantidad}`}
                             </Button>
 
                             <Link to="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors">

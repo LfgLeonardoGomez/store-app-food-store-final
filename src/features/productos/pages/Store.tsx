@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchBar } from '../../../shared/components/molecular/SearchBar';
 import { ProductCard } from '../components/ProductCard';
 import { useProductos } from '../hooks/useProductos';
 import { useCategorias } from '../../categorias/hooks/useCategoria';
+import { useCartStore } from '../../../store/useCartStore';
 
 
 
@@ -13,6 +14,20 @@ export default function Store() {
     const {productos, isLoadingProductos, isErrorProductos} = useProductos()
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>('')
     const { data: categoriasData } = useCategorias();
+    const items = useCartStore((state) => state.items)
+    const syncStock = useCartStore((state) => state.syncStock)
+
+    useEffect(() => {
+        if (productos?.data) {
+            productos.data.forEach(producto => {
+                const estaEnCarrito = items.find(item => item.id === producto.id)
+                if (estaEnCarrito && estaEnCarrito.stock_cantidad !== producto.stock_cantidad) {
+                    syncStock(producto.id, producto.stock_cantidad)
+                }
+            })
+        }
+    }, [productos, items, syncStock])
+    
     const productosFiltrados = productos?.data.filter((p) => {
     const coincideNombre = p.nombre.toLowerCase().includes(searchQuery.toLowerCase());
     const coincideCategoria = categoriaSeleccionada === '' || 
@@ -77,6 +92,7 @@ export default function Store() {
                                 precio={parseFloat(product.precio_base)}
                                 imagen={product.imagen_url || undefined}
                                 categoria={product.categorias[0]?.nombre}
+                                stock_cantidad={product.stock_cantidad}
                             />
                         ))}
                     </div>

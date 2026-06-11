@@ -4,10 +4,26 @@ UI mas bonita para el store: no hace falta tanto,
 el profe dice de agregar un banner tipo carrousel entre el titulo y "nuestros prductos"
 
 
-acomodar el stock, que no permita pedir mas que el stock, 
-y que al comprar se descuente del stock
+acomodar el stock, que no permita pedir mas que el stock ✅
+
+y que al comprar se descuente del stock ✅
+
+y que al cancelar se devuelva el stock solo si esta en Estado
+pendiente o confirmado ✅
+
+validacion del stock en el front ✅
 
 revisar la proteccion de rutas
+
+implementar tabla "Pago"
+
+modificar EstadoPedido ✅
+
+implementar websocket en rooms ✅
+
+implementar mercadopago
+
+modificar en el schema de pedido, envia id usuario y seria mejor ver el nombre
 
 vistas:
 
@@ -15,9 +31,9 @@ perfil del usuario ✅
 
 sidebar user ✅
 
-ver mis pedidos
+ver mis pedidos ✅
 
-ver-crear direcciones
+ver-crear direcciones ✅
 
 registro  ✅
 
@@ -25,4 +41,4 @@ agregar boton iniciar/cerrar sesion en navbar ✅
 
 pagos
 
-modificar en el schema de pedido, envia id usuario y seria mejor ver el nombre
+agregar cancelacion para el cliente, solo pendiente y confirmado

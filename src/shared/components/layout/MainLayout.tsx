@@ -9,7 +9,7 @@ export default function MainLayout() {
             <NavBar />
             <main className="flex-1">
                 <Outlet />
-                <Toaster position="top-right" richColors /> 
+                <Toaster position="top-center" richColors /> 
             </main>
         </div>
     );
