@@ -85,6 +85,10 @@ export const NavBar = () => {
                     onMisPedidos= { ()=> { navigate('/mis-pedidos');
                         setIsSidebarOpen(false)
                     }}
+                    onMisDirecciones= { ()=> { navigate('/mis-direcciones');
+                        setIsSidebarOpen(false)
+                    }}
+                    
                 />
                 </>
     )

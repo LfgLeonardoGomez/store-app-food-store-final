@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { useMisPedidos } from '../../carrito/hooks/useCheckout'
+import { useMisPedidos } from '../hooks/useMisPedidos'
 import { useOrderStatusWS, type IWsEvent } from '../hooks/useOrderStatusWS'
 import { Button } from '../../../shared/components/ui/Button'
 import { ESTADO_LABELS, ESTADO_COLORS, type EstadoPedido, type PedidoPublic } from '../types/types'

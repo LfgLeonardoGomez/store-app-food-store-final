@@ -7,13 +7,14 @@ interface UserSidebarProps {
     onLogout: () => void
     userName?:string
     onMisPedidos: ()=> void
+    onMisDirecciones: ()=> void
 }  
-export const UserSidebar = ({ isOpen, onClose, onLogout, userName, onMisPedidos}: UserSidebarProps) => {
+export const UserSidebar = ({ isOpen, onClose, onLogout, userName, onMisPedidos, onMisDirecciones}: UserSidebarProps) => {
     if (!isOpen) return null
     const menuItems = [
         { icon: User, label: 'Mi perfil', action: () => alert('Próximamente: Perfil') },
         { icon: Package, label: 'Mis pedidos', action: onMisPedidos },
-        { icon: MapPin, label: 'Mis direcciones', action: () => alert('Próximamente: Direcciones') },
+        { icon: MapPin, label: 'Mis direcciones', action: onMisDirecciones },
     ]
     return (
         <>

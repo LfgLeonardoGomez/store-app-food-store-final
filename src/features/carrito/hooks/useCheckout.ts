@@ -1,26 +1,19 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { pedidoService } from '../../pedidos/service/pedidoService';
 import type { PedidoCreate } from '../../pedidos/types/types';
 
-export const useDirecciones = () => {
-    return useQuery({
-    queryKey: ['direcciones'],
-    queryFn: () => pedidoService.listarDirecciones(),
-    });
-};
-export const useCrearPedido = () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: (pedido: PedidoCreate) => pedidoService.crear(pedido),
-        onSuccess: ()=> {
-            queryClient.invalidateQueries({ queryKey: ['mis-pedidos'] })
-        }
-    });
-};
+export const useCheckout = () => {
+    
+        const queryClient = useQueryClient()
+        const crearPedido = useMutation({
+            mutationFn: (pedido: PedidoCreate) => pedidoService.crear(pedido),
+            onSuccess: ()=> {
+                queryClient.invalidateQueries({ queryKey: ['mis-pedidos'] })
+            }
+        });
+        return {crearPedido};
+    };
 
-export const useMisPedidos = () => {
-    return useQuery({
-        queryKey: ["mis-pedidos"],
-        queryFn: ()=> pedidoService.listarMisPedidos(),
-    })
-}
+
+
+

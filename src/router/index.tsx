@@ -9,6 +9,7 @@ import ProductDetailPage from '../features/productos/pages/ProductDetailPage'
 import CheckoutPage from '../features/carrito/pages/CheckoutPage'
 import RegisterPage from '../features/auth/pages/register'
 import MisPedidosPage from '../features/pedidos/pages/MisPedidosPage'
+import MisDireccionesPage from '../features/direcciones/pages/misDireccionesPage'
 
 export default function AppRouter() {
     return (
@@ -21,6 +22,7 @@ export default function AppRouter() {
                 <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage/>} />
                 <Route path={ROUTES.CHECKOUT} element={<CheckoutPage/>} />
                 <Route path={ROUTES.MIS_PEDIDOS} element={<MisPedidosPage/>} />
+                <Route path={ROUTES.MIS_DIRECCIONES} element={<MisDireccionesPage/>} />
             </Route>
 
             {/* Rutas sin navbar */}

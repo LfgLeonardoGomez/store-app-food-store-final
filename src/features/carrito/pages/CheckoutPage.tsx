@@ -2,11 +2,16 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../shared/components/ui/Button'
 import { useCartStore } from '../../../store/useCartStore'
-import { useDirecciones, useCrearPedido } from '../hooks/useCheckout'
+import { useDirecciones } from '../../direcciones/hooks/useDirecciones'
+import {useCheckout} from '../hooks/useCheckout'
 import { toast } from 'sonner'
+import { DireccionesModal } from '../../direcciones/components/DireccionesModal'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function CheckoutPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const [modalOpen, setModalOpen] = useState(false)
 
   // Estado local del formulario
   const [direccionId, setDireccionId] = useState<number | ''>('')
@@ -17,56 +22,56 @@ export default function CheckoutPage() {
   const items = useCartStore((state) => state.items)
   const clearCart = useCartStore((state) => state.clearCart)
   const { data: direccionesData, isLoading: loadingDirecciones } = useDirecciones()
-  const crearPedido = useCrearPedido()
+  const { crearPedido } = useCheckout()
 
   // Cálculos
   const subtotal = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0)
   const costoEnvio = 50
   const total = subtotal + costoEnvio
 
-  // Si el carrito está vacío, mostrar mensaje
-  if (items.length === 0) {
-    return (
-      <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4">
-        <p className="text-text-secondary text-lg">Tu carrito está vacío</p>
-        <Button variant="primary" className="mt-4" onClick={() => navigate('/')}>
-          Ver productos
-        </Button>
-      </div>
-    )
-  }
-
-  const handleConfirmar = () => {
-    if (!direccionId) {
-      toast.error('Seleccioná una dirección de entrega')
-      return
+    // Si el carrito está vacío, mostrar mensaje
+    if (items.length === 0) {
+      return (
+        <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4">
+          <p className="text-text-secondary text-lg">Tu carrito está vacío</p>
+          <Button variant="primary" className="mt-4" onClick={() => navigate('/')}>
+            Ver productos
+          </Button>
+        </div>
+      )
     }
 
-    const payload = {
-      direccion_id: Number(direccionId),
-      forma_pago_codigo: formaPago,
-      descuento: 0,
-      notas: notas || undefined,
-      detalles: items.map((item) => ({
-        producto_id: Number(item.id),
-        cantidad: item.cantidad,
-        nombre_snapshot: item.nombre,
-        precio_snapshot: item.precio,
-        personalizacion: [] as number[][],
-      })),
-    }
+    const handleConfirmar = () => {
+      if (!direccionId) {
+        toast.error('Seleccioná una dirección de entrega')
+        return
+      }
 
-    crearPedido.mutate(payload, {
-      onSuccess: () => {
-        toast.success('¡Pedido creado con éxito!')
-        clearCart()
-        navigate('/')
-      },
-      onError: (error: any) => {
-        toast.error(error?.response?.data?.detail || 'Error al crear el pedido')
-      },
-    })
-  }
+      const payload = {
+        direccion_id: Number(direccionId),
+        forma_pago_codigo: formaPago,
+        descuento: 0,
+        notas: notas || undefined,
+        detalles: items.map((item) => ({
+          producto_id: Number(item.id),
+          cantidad: item.cantidad,
+          nombre_snapshot: item.nombre,
+          precio_snapshot: item.precio,
+          personalizacion: [] as number[][],
+        })),
+      }
+
+      crearPedido.mutate(payload, {
+        onSuccess: () => {
+          toast.success('¡Pedido creado con éxito!')
+          clearCart()
+          navigate('/')
+        },
+        onError: (error: any) => {
+          toast.error(error?.response?.data?.detail || 'Error al crear el pedido')
+        },
+      })
+    }
 
   return (
     <div className="min-h-screen bg-surface">
@@ -99,6 +104,9 @@ export default function CheckoutPage() {
                   ))}
                 </select>
               )}
+              <Button variant="outline" size="sm" onClick={() => setModalOpen(true)}>
+              Agregar nueva direccion
+              </Button>
             </div>
 
             {/* Forma de pago */}
@@ -180,6 +188,15 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+      {/* Modal para agregar nueva dirección */}
+      <DireccionesModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: ['direcciones'] })
+            setModalOpen(false)
+          }}
+      />
     </div>
   )
 }
