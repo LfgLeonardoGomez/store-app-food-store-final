@@ -15,15 +15,13 @@ validacion del stock en el front ✅
 
 revisar la proteccion de rutas
 
-implementar tabla "Pago"
+implementar tabla "Pago" ✅
 
 modificar EstadoPedido ✅
 
 implementar websocket en rooms ✅
 
-implementar mercadopago
-
-modificar en el schema de pedido, envia id usuario y seria mejor ver el nombre
+implementar mercadopago ✅
 
 vistas:
 
@@ -39,6 +37,22 @@ registro  ✅
 
 agregar boton iniciar/cerrar sesion en navbar ✅
 
-pagos
+pagos ✅
 
-agregar cancelacion para el cliente, solo pendiente y confirmado
+agregar un badge en cada pedido de mis pedidos que muestre el estado del pago
+
+agregar cancelacion para el cliente, solo pendiente y confirmado ✅
+
+rate limiting ✅
+
+modulo auth separado ✅
+
+unidad de medida para producto ✅
+
+agregar imagen en categoria ✅
+
+en ingrediente stock_cantidad ✅
+
+producto_ingrediente agregar es_removible, cantidad y unidaddemedida.id(crear entidad unidad de medida) ✅
+
+

@@ -6,5 +6,6 @@ export const ROUTES = {
     CHECKOUT: '/checkout',
     REGISTER: '/register',
     MIS_PEDIDOS: '/mis-pedidos',
-    MIS_DIRECCIONES: '/mis-direcciones'
+    MIS_DIRECCIONES: '/mis-direcciones',
+    ORDER_RESULT: '/orders/:pedidoId/:status', 
 } as const

@@ -10,6 +10,7 @@ import CheckoutPage from '../features/carrito/pages/CheckoutPage'
 import RegisterPage from '../features/auth/pages/register'
 import MisPedidosPage from '../features/pedidos/pages/MisPedidosPage'
 import MisDireccionesPage from '../features/direcciones/pages/misDireccionesPage'
+import OrderResultPage from '../features/pagos/pages/OrderResultPage'
 
 export default function AppRouter() {
     return (
@@ -23,11 +24,13 @@ export default function AppRouter() {
                 <Route path={ROUTES.CHECKOUT} element={<CheckoutPage/>} />
                 <Route path={ROUTES.MIS_PEDIDOS} element={<MisPedidosPage/>} />
                 <Route path={ROUTES.MIS_DIRECCIONES} element={<MisDireccionesPage/>} />
+
             </Route>
 
             {/* Rutas sin navbar */}
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage/>}/>
+            <Route path={ROUTES.ORDER_RESULT} element={<OrderResultPage />} />
         </Routes>
     )
 }

@@ -4,6 +4,7 @@ import { Button } from '../../../shared/components/ui/Button'
 import { useCartStore } from '../../../store/useCartStore'
 import { useDirecciones } from '../../direcciones/hooks/useDirecciones'
 import {useCheckout} from '../hooks/useCheckout'
+import { usePagos } from '../../pagos/hooks/usePagos'
 import { toast } from 'sonner'
 import { DireccionesModal } from '../../direcciones/components/DireccionesModal'
 import { useQueryClient } from '@tanstack/react-query'
@@ -23,6 +24,7 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((state) => state.clearCart)
   const { data: direccionesData, isLoading: loadingDirecciones } = useDirecciones()
   const { crearPedido } = useCheckout()
+  const { crearPreferencia } = usePagos()
 
   // Cálculos
   const subtotal = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0)
@@ -62,10 +64,31 @@ export default function CheckoutPage() {
       }
 
       crearPedido.mutate(payload, {
-        onSuccess: () => {
-          toast.success('¡Pedido creado con éxito!')
-          clearCart()
-          navigate('/')
+        onSuccess: (pedido: any) => {
+          // Si eligió Mercado Pago, creamos la preferencia y redirigimos a MP
+          if (formaPago === 'MERCADOPAGO') {
+            crearPreferencia.mutate(
+              { pedido_id: pedido.id },
+              {
+                onSuccess: (pago) => {
+                  if (pago.mp_init_point) {
+                    clearCart()
+                    // window.location.href fuerza navegación completa a un sitio externo (MP)
+                    window.location.href = pago.mp_init_point
+                  } else {
+                    toast.error('No se recibió el link de pago. Intentá de nuevo.')
+                  }
+                },
+                onError: (error: any) => {
+                  toast.error(error?.response?.data?.detail || 'Error al iniciar el pago con Mercado Pago')
+                },
+              }
+            )
+          } else {
+            // Efectivo o Transferencia: redirigimos a la página de confirmación manual
+            clearCart()
+            navigate(`/orders/${pedido.id}/success?manual=true`)
+          }
         },
         onError: (error: any) => {
           toast.error(error?.response?.data?.detail || 'Error al crear el pedido')
@@ -179,11 +202,15 @@ export default function CheckoutPage() {
               variant="primary"
               size="lg"
               className="w-full"
-              disabled={!direccionId || crearPedido.isPending}
+              disabled={!direccionId || crearPedido.isPending || crearPreferencia.isPending}
               onClick={handleConfirmar}
             
             >
-              {crearPedido.isPending ? 'Procesando...' : 'Confirmar pedido'}
+              {crearPreferencia.isPending
+                ? 'Conectando con Mercado Pago...'
+                : crearPedido.isPending
+                  ? 'Procesando...'
+                  : 'Confirmar pedido'}
             </Button>
           </div>
         </div>

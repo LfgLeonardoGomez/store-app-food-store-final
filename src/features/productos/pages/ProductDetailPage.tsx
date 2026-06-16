@@ -26,11 +26,11 @@ const puedeAgregar = (cantidadEnCarrito + cantidad)<= (producto?.stock_cantidad 
     if (!producto) return <div>Producto no encontrado</div>
 
     return (
-        <div className = 'min-h-screen bg-surface'>
-            <div className = "max-w-7xl mx-auto px-4 py-8">
-                <div className = "grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className = 'bg-surface py-8 md:py-12'>
+            <div className = "max-w-5xl mx-auto px-6 py-2 md:py-4">
+                <div className = "grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
                         
-                    <div className="relative aspect-square rounded-2xl overflow-hidden bg-surface shadow-card">
+                    <div className="relative aspect-[4/5] md:aspect-square max-h-[380px] md:max-h-[420px] rounded-xl overflow-hidden bg-surface shadow-sm mx-auto">
                         {producto.imagen_url ? (
                             <img src={producto.imagen_url} alt={producto.nombre} className="w-full h-full object-cover" />
                         ) : (
@@ -40,42 +40,42 @@ const puedeAgregar = (cantidadEnCarrito + cantidad)<= (producto?.stock_cantidad 
                         )}
                     </div>
 
-                    <div className= "flex flex-col gap-6">
-                        <h1 className="text-3xl lg:text-4xl font-bold text-text-primary">{producto.nombre}</h1>
-                        <div className="flex flex-wrap gap-2">
+                    <div className= "flex flex-col gap-3 md:gap-4 text-center md:text-left">
+                        <h1 className="text-xl md:text-2xl font-semibold text-text-primary tracking-tight">{producto.nombre}</h1>
+                        <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                         {producto.categorias.map((cat) => (
                             <Badge key={cat.id} variant="primary">{cat.nombre}</Badge>
                         ))}
                         </div>
-                        <p className="text-text-secondary text-lg leading-relaxed">{producto.descripcion || 'Sin descripción'}</p>
-                        <div className="text-3xl font-bold text-primary">${parseFloat(producto.precio_base)}
+                        <p className="text-text-secondary text-sm leading-relaxed max-w-prose mx-auto md:mx-0">{producto.descripcion || 'Sin descripción'}</p>
+                        <div className="text-xl font-semibold text-primary">${parseFloat(producto.precio_base)}
                         </div>
 
-                        <div className="flex items-center gap-4">
-                        <span className="text-text-secondary">Cantidad:</span>
-                        <div className="flex items-center border border-border rounded-lg">
+                        <div className="flex items-center gap-4 justify-center md:justify-start">
+                        <span className="text-text-secondary text-sm">Cantidad:</span>
+                        <div className="flex items-center border border-border rounded-md h-10">
                             <button onClick={() => setCantidad(Math.max(1, cantidad - 1))}
                                 disabled = {cantidad <= 1}
-                                className="px-3 py-2 hover:bg-surface">
+                                className="w-10 h-10 flex items-center justify-center hover:bg-surface transition-colors">
                             <Minus size={18} />
                             </button>
-                            <span className="w-12 text-center font-medium">{cantidad}</span>
+                            <span className="w-10 text-center font-medium text-sm">{cantidad}</span>
                             <button onClick={() => setCantidad(Math.max(1,cantidad + 1))}
                                     disabled ={cantidad >= maxCantidad}
-                                    className="px-3 py-2 hover:bg-surface">
+                                    className="w-10 h-10 flex items-center justify-center hover:bg-surface transition-colors">
                             <Plus size={18} />
                             </button>
                         </div>
                         </div>
                         
                         {cantidad >= maxCantidad && maxCantidad > 0 && (
-                        <p className="text-sm text-danger">Límite de stock alcanzado</p>
+                        <p className="text-xs text-danger">Límite de stock alcanzado</p>
                         )}
 
                         <Button 
                             variant="primary" 
-                            size="lg" 
-                            className="w-full py-4 text-lg"
+                            size="md" 
+                            className="w-full h-10 text-xs font-medium tracking-wide uppercase"
                             disabled={producto.stock_cantidad===0 || cantidadEnCarrito >= producto.stock_cantidad}
                             onClick={() => {
                                 if (!puedeAgregar) {
@@ -99,8 +99,8 @@ const puedeAgregar = (cantidadEnCarrito + cantidad)<= (producto?.stock_cantidad 
                                 : `Agregar al carrito — $${parseFloat(producto.precio_base) * cantidad}`}
                             </Button>
 
-                            <Link to="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors">
-                                <ArrowLeft size={18} />
+                            <Link to="/" className="inline-flex items-center justify-center gap-2 text-xs text-text-muted hover:text-text-secondary transition-colors">
+                                <ArrowLeft size={16} />
                                 Volver a la tienda
                                 </Link>
 
