@@ -11,5 +11,9 @@ export const pedidoService = {
     listarMisPedidos: async (): Promise <PedidoList> => {
         const { data } = await api.get("/pedidos/pedidosdelusuario")
         return data
-    }
+    },
+
+    cancelar: async (pedidoId: number): Promise <void> => {
+        await api.delete(`/pedidos/${pedidoId}/cancelar`)
+    },
 };

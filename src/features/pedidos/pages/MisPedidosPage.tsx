@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { useMisPedidos } from '../hooks/useMisPedidos'
 import { useOrderStatusWS, type IWsEvent } from '../hooks/useOrderStatusWS'
 import { Button } from '../../../shared/components/ui/Button'
+import { pedidoService } from '../service/pedidoService'
 import { ESTADO_LABELS, ESTADO_COLORS, type EstadoPedido, type PedidoPublic } from '../types/types'
 
 const FORMA_PAGO_LABELS: Record<string, string> = {
@@ -15,6 +16,8 @@ const FORMA_PAGO_LABELS: Record<string, string> = {
 const ESTADOS_ACTIVOS: EstadoPedido[] = ['PENDIENTE', 'CONFIRMADO', 'EN_PREP', 'LISTO']
 const PASOS: EstadoPedido[] = ['PENDIENTE', 'CONFIRMADO', 'EN_PREP', 'LISTO', 'ENTREGADO']
 
+const ESTADOS_CANCELABLES: EstadoPedido[] = ['PENDIENTE', 'CONFIRMADO']
+
 const WS_ESTADO_MAP: Partial<Record<string, EstadoPedido>> = {
     PEDIDO_CONFIRMADO:'CONFIRMADO',
     PEDIDO_EN_PREPARACION:'EN_PREP',
@@ -23,7 +26,9 @@ const WS_ESTADO_MAP: Partial<Record<string, EstadoPedido>> = {
     PEDIDO_ENTREGADO:'ENTREGADO',
 }
 
-function PedidoActivoCard({ pedido, estadoActual }: { pedido: PedidoPublic; estadoActual: EstadoPedido }) {
+function PedidoActivoCard({ pedido, estadoActual, onCancelar, cancelando }: { pedido: PedidoPublic; estadoActual: EstadoPedido, onCancelar: () => void, cancelando: boolean }) {
+    const [confirmar, setConfirmar] = useState(false)
+    const cancelable= ESTADOS_CANCELABLES.includes(estadoActual)
     const cancelado = estadoActual === 'CANCELADO'
     const pasoActual = PASOS.indexOf(estadoActual)
 
@@ -45,7 +50,7 @@ function PedidoActivoCard({ pedido, estadoActual }: { pedido: PedidoPublic; esta
                         const actual = i === pasoActual
                         return (
                             <div key={paso} className="flex items-center flex-1 min-w-0">
-                                <div className="flex flex-col items-center flex-shrink-0">
+                                <div className="flex flex-col items-center shrink-0">
                                     <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors
                                         ${completado ? 'bg-primary border-primary text-white' :
                                         actual     ? 'bg-primary/20 border-primary text-primary' :
@@ -72,6 +77,31 @@ function PedidoActivoCard({ pedido, estadoActual }: { pedido: PedidoPublic; esta
                 </span>
                 <span className="font-bold text-primary">Total: ${pedido.total}</span>
             </div>
+
+            {cancelable && !cancelado && (
+                <div className="mt-4 border-t border-border pt-3">
+                    {!confirmar ? (
+                        <Button variant="danger" size="sm" onClick={() => setConfirmar(true)}>
+                            Cancelar pedido
+                        </Button>
+                    ) : (
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm text-text-secondary">¿Confirmás la cancelación?</span>
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            disabled={cancelando}
+                            onClick={() => { onCancelar(); setConfirmar(false) }}
+                            >
+                        {cancelando ? 'Cancelando...' : 'Sí, cancelar'}
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => setConfirmar(false)}>
+                            No, volver
+                        </Button>
+                    </div>
+                    )}
+                </div>
+            )}
         </div>
     )
 }
@@ -89,6 +119,15 @@ export default function MisPedidosPage() {
     useEffect(() => {
         setActiveEstado(activeOrder ? activeOrder.estado_codigo as EstadoPedido : null)
     }, [activeOrder?.id])
+
+    const cancelarMutation = useMutation({
+        mutationFn: (pedidoId: number) =>
+            pedidoService.cancelar(pedidoId),
+            onSuccess: ()=> {
+                setActiveEstado("CANCELADO")
+                queryClient.invalidateQueries({queryKey: ['mis-pedidos'] })
+            },
+    })
 
     const handleWsMessage = useCallback((msg: IWsEvent) => {
         const newEstado = WS_ESTADO_MAP[msg.event]
@@ -134,7 +173,12 @@ export default function MisPedidosPage() {
                 <h1 className="text-2xl font-bold text-text-primary mb-6">Mis pedidos</h1>
 
                 {activeOrder && activeEstado && (
-                    <PedidoActivoCard pedido={activeOrder} estadoActual={activeEstado} />
+                    <PedidoActivoCard 
+                        pedido={activeOrder} 
+                        estadoActual={activeEstado}
+                        onCancelar= {()=> cancelarMutation.mutate(activeOrder.id)}
+                        cancelando= {cancelarMutation.isPending} 
+                    />
                 )}
 
                 {pedidos.length === 0 ? (
