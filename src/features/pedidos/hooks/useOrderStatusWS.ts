@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from "react"
+import { useWsStore } from "../../../store/wsStore"
 
 
 const WS_URL = `${import.meta.env.VITE_API_URL.replace(/^http/, "ws")}/pedidos/cocina/ws`
@@ -67,6 +68,7 @@ export function useOrderStatusWS ({ onMessage, enabled = true} : IUseWebSocketOp
                     return
                 }
                 retryCount = 0
+                useWsStore.getState().connect()
                 onMessageRef.current?.({ event: "WS_CONNECTED", data: null})
 
                 setIsConnected(true)
@@ -90,7 +92,7 @@ export function useOrderStatusWS ({ onMessage, enabled = true} : IUseWebSocketOp
                 
                 if (wsRef.current === ws) wsRef.current = null
                 currentWs = null
-
+                useWsStore.getState().disconnect()
                 setIsConnected(false)
 
                 const cierreNormal = e.code === 1000
