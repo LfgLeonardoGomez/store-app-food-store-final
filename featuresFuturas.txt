@@ -8,12 +8,9 @@ acomodar el stock, que no permita pedir mas que el stock ✅
 
 y que al comprar se descuente del stock ✅
 
-y que al cancelar se devuelva el stock solo si esta en Estado
-pendiente o confirmado ✅
+y que al cancelar se devuelva el stock solo si esta en Estado pendiente o confirmado ✅
 
 validacion del stock en el front ✅
-
-revisar la proteccion de rutas
 
 implementar tabla "Pago" ✅
 
@@ -39,7 +36,6 @@ agregar boton iniciar/cerrar sesion en navbar ✅
 
 pagos ✅
 
-agregar un badge en cada pedido de mis pedidos que muestre el estado del pago
 
 agregar cancelacion para el cliente, solo pendiente y confirmado ✅
 
@@ -55,4 +51,12 @@ en ingrediente stock_cantidad ✅
 
 producto_ingrediente agregar es_removible, cantidad y unidaddemedida.id(crear entidad unidad de medida) ✅
 
+agregar al pedido la posibilidad de ver el estado del pago, y un detail para ver todos los detalles del pedido ✅
 
+acomodar .env
+
+tests
+
+cambiar todos los endpoints a /api/v1 
+
+revisar la proteccion de rutas ✅

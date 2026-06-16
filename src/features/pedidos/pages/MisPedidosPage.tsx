@@ -5,7 +5,7 @@ import { useMisPedidos } from '../hooks/useMisPedidos'
 import { useOrderStatusWS, type IWsEvent } from '../hooks/useOrderStatusWS'
 import { Button } from '../../../shared/components/ui/Button'
 import { pedidoService } from '../service/pedidoService'
-import { ESTADO_LABELS, ESTADO_COLORS, type EstadoPedido, type PedidoPublic } from '../types/types'
+import { ESTADO_LABELS, ESTADO_COLORS, type EstadoPedido, type PedidoPublic, PAGO_ESTADO_LABELS, PAGO_ESTADO_COLORS } from '../types/types'
 
 const FORMA_PAGO_LABELS: Record<string, string> = {
     EFECTIVO: 'Efectivo',
@@ -36,9 +36,16 @@ function PedidoActivoCard({ pedido, estadoActual, onCancelar, cancelando }: { pe
         <div className="bg-background rounded-card shadow-card p-5 mb-6 border-l-4 border-primary">
             <div className="flex items-center justify-between mb-4">
                 <span className="font-bold text-text-primary text-lg">Pedido actual — #{pedido.id}</span>
-                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${ESTADO_COLORS[estadoActual]}`}>
-                    {ESTADO_LABELS[estadoActual]}
-                </span>
+                <div className="flex items-center gap-2">
+                    {pedido.estado_pago && (
+                        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${PAGO_ESTADO_COLORS[pedido.estado_pago] ?? 'bg-gray-100 text-gray-600'}`}>
+                            {PAGO_ESTADO_LABELS[pedido.estado_pago] ?? pedido.estado_pago}
+                        </span>
+                    )}
+                    <span className={`text-xs font-semibold px-3 py-1 rounded-full ${ESTADO_COLORS[estadoActual]}`}>
+                        {ESTADO_LABELS[estadoActual]}
+                    </span>
+                </div>
             </div>
 
             {cancelado ? (
@@ -192,12 +199,19 @@ export default function MisPedidosPage() {
                         <div className="flex flex-col gap-4">
                             {historial.map((pedido) => (
                                 <div key={pedido.id} className="bg-background rounded-card shadow-card p-5 flex flex-col gap-3">
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-bold text-text-primary">Pedido #{pedido.id}</span>
+                                <div className="flex items-center justify-between">
+                                    <span className="font-bold text-text-primary">Pedido #{pedido.id}</span>
+                                    <div className="flex items-center gap-2">
+                                        {pedido.estado_pago && (
+                                            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${PAGO_ESTADO_COLORS[pedido.estado_pago] ?? 'bg-gray-100 text-gray-600'}`}>
+                                                {PAGO_ESTADO_LABELS[pedido.estado_pago] ?? pedido.estado_pago}
+                                            </span>
+                                        )}
                                         <span className={`text-xs font-semibold px-3 py-1 rounded-full ${ESTADO_COLORS[pedido.estado_codigo as EstadoPedido]}`}>
                                             {ESTADO_LABELS[pedido.estado_codigo as EstadoPedido]}
                                         </span>
                                     </div>
+                                </div>
                                     <div className="flex flex-col gap-1 text-sm text-text-secondary">
                                         <span>Forma de pago: {FORMA_PAGO_LABELS[pedido.forma_pago_codigo] ?? pedido.forma_pago_codigo}</span>
                                         {pedido.notas && <span>Notas: {pedido.notas}</span>}

@@ -14,7 +14,7 @@ export const authService = {
     params.append('username', username)
     params.append('password', password)
 
-    const { data } = await api.post('/api/v1/login', params, {
+    const { data } = await api.post('/login', params, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -23,16 +23,16 @@ export const authService = {
   },
 
   logout: async () => {
-    const { data } = await api.post('/api/v1/logout')
+    const { data } = await api.post('/logout')
     return data
   },
 
   me: async () => {
-    const { data } = await api.get('/api/v1/me')
+    const { data } = await api.get('/me')
     return data
   },
   register: async (dataRegistro:RegisterType)=>{
-    const { data } = await api.post("/api/v1/register",dataRegistro)
+    const { data } = await api.post("/register",dataRegistro)
     return data
   }
 }

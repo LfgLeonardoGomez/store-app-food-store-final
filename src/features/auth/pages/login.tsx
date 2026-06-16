@@ -27,11 +27,21 @@ export default function Login() {
     try {
       await authService.login(email, password)
       const user = await authService.me()
-      useAuthStore.getState().setAuth({ id: user.id, name: user.nombre, email: user.email })
+      useAuthStore.getState().setAuth({ id: user.id, name: user.nombre, email: user.email, roles: user.roles || [] })
       toast.success('¡Bienvenido!')
       navigate('/')
     } catch (err: any) {
-      const msg = err?.response?.data?.detail || 'Credenciales inválidas'
+      const data = err?.response?.data
+      let msg = 'Credenciales inválidas'
+
+      if (data?.detail && Array.isArray(data.detail)) {
+        msg = data.detail.map((d: any) => d.msg).join(', ')
+      } else if (typeof data?.detail === 'string') {
+        msg = data.detail
+      } else if (typeof data?.msg === 'string') {
+        msg = data.msg
+      }
+
       setError(msg)
       toast.error(msg)
     } finally {
@@ -117,7 +127,7 @@ export default function Login() {
             Todavia no tenes un cuenta?...
           </span>
           <Link
-            to="/"
+            to="/register"
             className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-primary transition-colors"
           >
                 Registrate!

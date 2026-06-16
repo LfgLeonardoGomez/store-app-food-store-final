@@ -11,6 +11,7 @@ import RegisterPage from '../features/auth/pages/register'
 import MisPedidosPage from '../features/pedidos/pages/MisPedidosPage'
 import MisDireccionesPage from '../features/direcciones/pages/misDireccionesPage'
 import OrderResultPage from '../features/pagos/pages/OrderResultPage'
+import { ClientRoute } from './PrivatesRoute'
 
 export default function AppRouter() {
     return (
@@ -21,9 +22,21 @@ export default function AppRouter() {
                 <Route path={ROUTES.PRODUCTS} element={<Store />} />
                 <Route path={ROUTES.CART} element={<CartPage />} />
                 <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage/>} />
-                <Route path={ROUTES.CHECKOUT} element={<CheckoutPage/>} />
-                <Route path={ROUTES.MIS_PEDIDOS} element={<MisPedidosPage/>} />
-                <Route path={ROUTES.MIS_DIRECCIONES} element={<MisDireccionesPage/>} />
+                <Route path={ROUTES.CHECKOUT} element={
+                    <ClientRoute>
+                        <CheckoutPage/>
+                    </ClientRoute>
+                } />
+                <Route path={ROUTES.MIS_PEDIDOS} element={
+                    <ClientRoute>
+                        <MisPedidosPage/>
+                    </ClientRoute>
+                } />
+                <Route path={ROUTES.MIS_DIRECCIONES} element={
+                    <ClientRoute>
+                        <MisDireccionesPage/>
+                    </ClientRoute>
+                } />
 
             </Route>
 

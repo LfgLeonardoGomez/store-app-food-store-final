@@ -53,9 +53,28 @@ export interface PedidoPublic {
     subtotal: string
     costo_envio: string
     total: string
+    estado_pago?: string | null
 }
 
 export interface PedidoList {
     data: PedidoPublic []
     count: number
+}
+
+export const PAGO_ESTADO_LABELS: Record<string, string> = {
+    pendiente: 'Pago pendiente',
+    aprobado: 'Pago confirmado',
+    rechazado: 'Pago rechazado',
+}
+
+export const PAGO_ESTADO_COLORS: Record<string, string> = {
+    pendiente: 'bg-yellow-100 text-yellow-800',
+    aprobado:  'bg-green-100 text-green-800',
+    rechazado: 'bg-red-100 text-red-800',
+}
+
+export const PAGO_ESTADO_BADGE_VARIANT: Record<string, 'warning' | 'success' | 'danger' | 'default'> = {
+    pendiente: 'warning',
+    aprobado:  'success',
+    rechazado: 'danger',
 }

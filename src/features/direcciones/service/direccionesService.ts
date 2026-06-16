@@ -4,12 +4,12 @@ import type { DireccionEntrega, DireccionEntregaCreate, DireccionEntregaList, Di
 
 export const direccionesService ={
     listarDirecciones: async (): Promise<DireccionEntregaList> => {
-    const { data } = await api.get('/direcciones/');
+    const { data } = await api.get('/direcciones');
     return data;
     },
 
     crearDireccion: async (direccion: DireccionEntregaCreate): Promise<DireccionEntrega> => {
-    const { data } = await api.post('/direcciones/', direccion);
+    const { data } = await api.post('/direcciones', direccion);
     return data;
     },
 
@@ -28,6 +28,6 @@ export const direccionesService ={
     },
 
     setPrincipal: async (id:number): Promise<void> => {
-        await api.put(`/direcciones/${id}/principal/`);
+        await api.put(`/direcciones/${id}/principal`);
     }
 }
