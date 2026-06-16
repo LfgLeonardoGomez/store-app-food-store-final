@@ -14,6 +14,6 @@ export const pedidoService = {
     },
 
     cancelar: async (pedidoId: number): Promise <void> => {
-        await api.delete(`/pedidos/${pedidoId}/cancelar`)
+        await api.post(`/pedidos/${pedidoId}/cancelar`)
     },
 };
