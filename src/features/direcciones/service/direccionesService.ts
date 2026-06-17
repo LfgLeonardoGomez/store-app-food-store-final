@@ -9,7 +9,7 @@ export const direccionesService ={
     },
 
     crearDireccion: async (direccion: DireccionEntregaCreate): Promise<DireccionEntrega> => {
-    const { data } = await api.post('/direcciones', direccion);
+    const { data } = await api.post('/direcciones/', direccion);
     return data;
     },
 
