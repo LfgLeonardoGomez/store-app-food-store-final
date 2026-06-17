@@ -65,6 +65,7 @@ Tarjeta de prueba MercadoPago (sandbox)
 └────────────────┴─────────────────────┘
 
 ---
-Video de presentación
+```
+## Video de presentación
 
-[Pendiente — se actualizará antes de la entrega]
+[Video](https://youtu.be/SkHezWvJIcg)
